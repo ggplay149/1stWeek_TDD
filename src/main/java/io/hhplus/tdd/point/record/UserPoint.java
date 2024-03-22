@@ -32,6 +32,7 @@ public record UserPoint(
         Long amount = userPoint.isEmpty() ? chargePoint : userPoint.get().point()+chargePoint;
         //히스토리 기록
         pointHistoryTable.insert(id,chargePoint, TransactionType.CHARGE,System.currentTimeMillis());
+        //포인트 업데이트
         return userPointTable.insertOrUpdate(id,amount);
     }
 
@@ -45,6 +46,7 @@ public record UserPoint(
         if(amount<0) throw new PointException(PointErrorResults.INSUFFICIENT_BALANCE);
         //히스토리 기록
         pointHistoryTable.insert(id,usePoint, TransactionType.USE,System.currentTimeMillis());
+        //포인트 업데이트
         return userPointTable.insertOrUpdate(id,amount);
     }
 }
