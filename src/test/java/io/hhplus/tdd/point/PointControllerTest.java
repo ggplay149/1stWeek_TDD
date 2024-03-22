@@ -49,6 +49,24 @@ public class PointControllerTest {
      * Point 조회
      ***************************/
 
+    //작성 이유 : PointService를 통해 조회 실패 확인
+    @Test
+    @DisplayName("포인트 조회 실패")
+    public void select_Fail_NoId() throws Exception {
+        //given
+        final String url = "/point/1";
+        UserPoint userPoint = new UserPoint(1L,1000L,System.currentTimeMillis());
+        doReturn(null).when(pointService).selectPoint(1L);
+        //when
+        final ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.get(url)
+                        .contentType(MediaType.APPLICATION_JSON)
+        );
+        //then
+        resultActions.andExpect(status().isInternalServerError());
+        //resultActions.andExpect(status().is(200));
+    }
+
     //작성 이유 : PointService를 통해 조회 성공 확인
     @Test
     @DisplayName("포인트 조회 성공")
