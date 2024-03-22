@@ -7,6 +7,7 @@ import io.hhplus.tdd.point.database.UserPointTable;
 import io.hhplus.tdd.point.record.PointHistory;
 import io.hhplus.tdd.point.record.TransactionType;
 import io.hhplus.tdd.point.record.UserPoint;
+import org.apache.catalina.User;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

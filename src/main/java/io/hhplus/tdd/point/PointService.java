@@ -22,22 +22,28 @@ public class PointService {
 
     //조회
     public UserPoint selectPoint(long id) {
+
         UserPoint userPoint = Optional.ofNullable(userPointTable.selectById(id))
         .orElseThrow(() -> new PointException(PointErrorResults.ID_NOT_FOUND));
+
         return userPoint;
     }
 
     //충전
     public synchronized UserPoint chargePoint(Long id, Long chargePoint) {
+
         Optional<UserPoint> optionalUserPoint = Optional.ofNullable(userPointTable.selectById(id));
+
         pointHistoryTable.insert(id,chargePoint, TransactionType.CHARGE,System.currentTimeMillis());
         return userPointTable.insertOrUpdate(id, UserPoint.charge(optionalUserPoint,chargePoint));
     }
 
     //사용
     public synchronized UserPoint usePoint(Long id, Long usePoint) {
+
         UserPoint userPoint = Optional.ofNullable(userPointTable.selectById(id))
                 .orElseThrow(() -> new PointException(PointErrorResults.ID_NOT_FOUND));
+
         pointHistoryTable.insert(id,usePoint,TransactionType.USE,System.currentTimeMillis());
         return userPointTable.insertOrUpdate(id, UserPoint.use(userPoint.point(),usePoint));
     }
