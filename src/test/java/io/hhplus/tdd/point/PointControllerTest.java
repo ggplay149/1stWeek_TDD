@@ -63,8 +63,8 @@ public class PointControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
         );
         //then
-        resultActions.andExpect(status().isInternalServerError());
-        //resultActions.andExpect(status().is(200));
+
+        resultActions.andExpect(status().is(200));
     }
 
     //작성 이유 : PointService를 통해 조회 성공 확인

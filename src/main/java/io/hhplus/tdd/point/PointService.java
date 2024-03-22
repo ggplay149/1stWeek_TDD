@@ -22,36 +22,21 @@ public class PointService {
 
     //조회
     public UserPoint selectPoint(long id) {
-
-        UserPoint userPoint = Optional.ofNullable(userPointTable.selectById(id))
-        .orElseThrow(() -> new PointException(PointErrorResults.ID_NOT_FOUND));
-
-        return userPoint;
+        return  UserPoint.select(id,userPointTable);
     }
 
     //충전
     public synchronized UserPoint chargePoint(Long id, Long chargePoint) {
-
-        Optional<UserPoint> optionalUserPoint = Optional.ofNullable(userPointTable.selectById(id));
-
-        pointHistoryTable.insert(id,chargePoint, TransactionType.CHARGE,System.currentTimeMillis());
-        return userPointTable.insertOrUpdate(id, UserPoint.charge(optionalUserPoint,chargePoint));
+        return UserPoint.charge(id,chargePoint,userPointTable,pointHistoryTable);
     }
 
     //사용
     public synchronized UserPoint usePoint(Long id, Long usePoint) {
-
-        UserPoint userPoint = Optional.ofNullable(userPointTable.selectById(id))
-                .orElseThrow(() -> new PointException(PointErrorResults.ID_NOT_FOUND));
-
-        pointHistoryTable.insert(id,usePoint,TransactionType.USE,System.currentTimeMillis());
-        return userPointTable.insertOrUpdate(id, UserPoint.use(userPoint.point(),usePoint));
+        return UserPoint.use(id,usePoint,userPointTable,pointHistoryTable);
     }
 
     //History 조회
     public List<PointHistory> selectPointHistories(long userid) {
-        List<PointHistory> pointHistories = Optional.ofNullable(pointHistoryTable.selectAllByUserId(userid))
-                .orElseThrow(() -> new PointException(PointErrorResults.USER_ID_NOT_FOUND));
-        return pointHistories;
+        return PointHistory.selectHistories(userid,pointHistoryTable);
     }
 }
